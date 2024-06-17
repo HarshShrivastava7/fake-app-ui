@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import { useLocation, BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Text, Progress, FlexboxGrid, Input, InputGroup, Button } from 'rsuite';
+import NewsItem from './NewsItem';
 
 const style2 = {
   width: 120,
@@ -37,7 +38,7 @@ export default function Result(props) {
     <>
       <div className="w-full">
         <FlexboxGrid justify="center" style={{ margin: '20px' }}>
-          <Text weight="semibold">{state.data.result}</Text>
+          <Text weight="semibold" style={{color: "#ffffff"}}>{state.data.result.toUpperCase()}</Text>
         </FlexboxGrid>
         <FlexboxGrid justify="center">
           <div style={style2}>
@@ -55,7 +56,7 @@ export default function Result(props) {
           </div>
         </FlexboxGrid>
         <FlexboxGrid justify="center" style={{ margin: '20px' }}>
-          <Text weight="semibold">Give us some feedback if we predicted it wrong :)</Text>
+          <Text weight="semibold" style={{color: "#ffffff"}}>Give us some feedback if we predicted it wrong :)</Text>
         </FlexboxGrid>
         <FlexboxGrid justify="center">
           <Button color="green" appearance="primary" onClick={submitFeedback('real')}>
@@ -65,6 +66,18 @@ export default function Result(props) {
             Fake
           </Button>
         </FlexboxGrid>
+        <NewsItem
+            apiTitle={state.data.title}
+            excerpt={state.data.content}
+            media={
+              state.data.image
+                ? state.data.image
+                : 'https://www.simplilearn.com/ice9/free_resources_article_thumb/what_is_image_Processing.jpg'
+            }
+            published_date={state.data.date}
+            url={state.data.url}
+            result={"ok"}
+          />
       </div>
     </>
   );

@@ -48,7 +48,7 @@ export default function Main(props) {
   return (
     <>
       <div className="w-full">
-        <h1 className="text-3xl text-center font-bold mb-8">Check if news is real or fake!</h1>
+        <h1 className="text-3xl text-center font-bold mb-8" style={{color: "#ffffff"}}>Check if news is real or fake!</h1>
 
         <FlexboxGrid justify="center">
           <InputGroup style={styles}>

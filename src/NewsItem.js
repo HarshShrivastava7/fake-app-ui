@@ -1,15 +1,19 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import CheckRoundIcon from '@rsuite/icons/CheckRound';
 import WarningRoundIcon from '@rsuite/icons/WarningRound';
-import { Text, FlexboxGrid, IconButton, ButtonToolbar } from 'rsuite';
+import './App.css';
+import { useNavigate, BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Text, Progress, FlexboxGrid, Input, InputGroup, Button } from 'rsuite';
 
 export default function NewsItem(props) {
-  let { apiTitle, excerpt, media, published_date, url, publisher } = props;
-  async function submitFeedback(feedback) {
-    const data = { feedback, URL: url };
+  let { apiTitle, excerpt, media, published_date, url, publisher, result } = props;
+
+  const navigate = useNavigate();
+
+  async function handleSubmit() {
+    const data = { URL: url };
     const params = {
       method: 'POST',
-      mode: 'cors',
       headers: {
         'Content-Type': 'application/json'
       },
@@ -17,12 +21,19 @@ export default function NewsItem(props) {
     };
 
     try {
-      const fetchResponse = await fetch('http://127.0.0.1:5000/feedback', params);
+      const fetchResponse = await fetch('http://127.0.0.1:5000/', params);
       const data = await fetchResponse.json();
       console.log(data);
+      navigate('/result', {
+        state: {
+          data: data,
+          url: url
+        }
+      });
     } catch (error) {
       console.error(error);
     }
+    console.log(url);
   }
 
   return (
@@ -35,7 +46,7 @@ export default function NewsItem(props) {
       }}>
       <div>
         <div className="card col-md-12">
-          <img src={media} className="card-img-top" alt="..." />
+          <img style={{height: "200px"}}src={media} className="card-img-top" alt="..." />
           <div className="card-body" style={{ border: '3px solid #7E7D89', marginTop: '3px' }}>
             <h5 className="card-title">{apiTitle}</h5>
             <p className="card-text">
@@ -56,25 +67,16 @@ export default function NewsItem(props) {
               <span className="visually-hidden">unread messages</span>
             </span>
           </div>
-          <Text weight="semibold" style={{ textAlign: 'center' }}>
-            Give us some feedback if we predicted it wrong :)
+          {result == "ok" ? <></> : <><Text weight="semibold" style={{ textAlign: 'center' }}>
+            Is This News True/False ?
           </Text>
           <FlexboxGrid justify="center">
-            <IconButton
-              circle
-              color="green"
-              appearance="primary"
-              icon={<CheckRoundIcon />}
-              onClick={() => submitFeedback('real')}
-            />
-            <IconButton
-              circle
-              color="red"
-              appearance="primary"
-              icon={<WarningRoundIcon />}
-              onClick={() => submitFeedback('fake')}
-            />
+          <Button color="green" appearance="primary" onClick={()=>handleSubmit()}>
+            Check
+          </Button>
           </FlexboxGrid>
+          </>}
+          
         </div>
 
         {/* {console.log(this.month)} */}
