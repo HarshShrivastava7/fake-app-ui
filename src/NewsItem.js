@@ -53,9 +53,6 @@ export default function NewsItem(props) {
               {excerpt == null ? '' : excerpt.length < 200 ? excerpt : excerpt.slice(0, 200)}
             </p>
             <h6 className="card-text">
-              <small className="text-muted" style={{ fontSize: '1.2em' }}>
-                Last Updated On {published_date.slice(0, 10)}
-              </small>
             </h6>
             <a href={url} target="_blank" rel="noreferrer" className="btn btn-dark btn-sm">
               Read More
