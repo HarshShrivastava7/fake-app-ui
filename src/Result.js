@@ -1,15 +1,7 @@
 import React, { Component } from 'react';
-import News from './News';
-import Navbar from './Navbar';
 import './App.css';
 import { useLocation, BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Text, Progress, FlexboxGrid, Input, InputGroup, Button } from 'rsuite';
-import SearchIcon from '@rsuite/icons/Search';
-
-const styles = {
-  width: 300,
-  marginBottom: 10
-};
 
 const style2 = {
   width: 120,
@@ -17,38 +9,15 @@ const style2 = {
   marginRight: 10
 };
 
-export default function Result() {
-    const location = useLocation();
-    const {state} = location;
-  const handleChange = (e) => {
-    setVal(e);
-  };
-
-  async function handleSubmit() {
-    const data = { URL: val };
-    const params = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    };
-
-    try {
-      const fetchResponse = await fetch('/', params);
-      const data = await fetchResponse.json();
-      console.log(data);
-    } catch (error) {
-      console.error(error);
-    }
-    console.log(val);
-  }
-  const [val, setVal] = React.useState('');
+export default function Result(props) {
+  const location = useLocation();
+  const { state } = location;
 
   async function submitFeedback(feedback) {
-    const data = { feedback, URL: val };
+    const data = { feedback, URL: state.url };
     const params = {
       method: 'POST',
+      mode: 'cors',
       headers: {
         'Content-Type': 'application/json'
       },
@@ -56,7 +25,7 @@ export default function Result() {
     };
 
     try {
-      const fetchResponse = await fetch('/feedback', params);
+      const fetchResponse = await fetch('http://127.0.0.1:5000/feedback', params);
       const data = await fetchResponse.json();
       console.log(data);
     } catch (error) {
@@ -68,11 +37,21 @@ export default function Result() {
     <>
       <div className="w-full">
         <FlexboxGrid justify="center" style={{ margin: '20px' }}>
-          <Text weight="semibold">Result</Text>
+          <Text weight="semibold">{state.data.result}</Text>
         </FlexboxGrid>
         <FlexboxGrid justify="center">
           <div style={style2}>
-            <Progress.Circle percent={( state.data.real_prob)} strokeColor="#4caf50" />
+            {parseInt(Number(state.data.real_prob * 100), 10) >= '50' ? (
+              <Progress.Circle
+                percent={parseInt(state.data.real_prob * 100, 10)}
+                strokeColor="#4caf50"
+              />
+            ) : (
+              <Progress.Circle
+                percent={parseInt(Number(state.data.real_prob * 100), 10)}
+                strokeColor="#f44336"
+              />
+            )}
           </div>
         </FlexboxGrid>
         <FlexboxGrid justify="center" style={{ margin: '20px' }}>

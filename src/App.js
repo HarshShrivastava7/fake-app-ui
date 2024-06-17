@@ -27,7 +27,6 @@ export default function App() {
                 <Route exact path="/technology" element={<Main genre={'technology'} />} />
                 <Route exact path="/result" element={<Result />} />
               </Routes>
-
             </div>
           </div>
         </Router>

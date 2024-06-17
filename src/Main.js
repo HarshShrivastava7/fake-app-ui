@@ -11,13 +11,7 @@ const styles = {
   marginBottom: 10
 };
 
-const style2 = {
-  width: 120,
-  display: 'inline-block',
-  marginRight: 10
-};
-
-export default function Main(props, {navigation}) {
+export default function Main(props) {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -38,38 +32,18 @@ export default function Main(props, {navigation}) {
       const fetchResponse = await fetch('http://127.0.0.1:5000/', params);
       const data = await fetchResponse.json();
       console.log(data);
-      navigation.navigate('/result', {
+      navigate('/result', {
         state: {
-            data: data
+          data: data,
+          url: val
         }
       });
-    //   navigate('/result');
     } catch (error) {
-    //   navigate('/result');
       console.error(error);
     }
     console.log(val);
   }
   const [val, setVal] = React.useState('');
-
-  async function submitFeedback(feedback) {
-    const data = { feedback, URL: val };
-    const params = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    };
-
-    try {
-      const fetchResponse = await fetch('/feedback', params);
-      const data = await fetchResponse.json();
-      console.log(data);
-    } catch (error) {
-      console.error(error);
-    }
-  }
 
   return (
     <>
