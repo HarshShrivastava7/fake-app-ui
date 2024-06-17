@@ -4,7 +4,7 @@ import Navbar from './Navbar';
 import './App.css';
 import { useNavigate, BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Text, Progress, FlexboxGrid, Input, InputGroup, Button } from 'rsuite';
-import SearchIcon from '@rsuite/icons/Search';
+import SendIcon from '@rsuite/icons/Send';
 
 const styles = {
   width: 300,
@@ -54,7 +54,7 @@ export default function Main(props) {
           <InputGroup style={styles}>
             <Input value={val} onChange={handleChange} />
             <InputGroup.Button onClick={handleSubmit}>
-              <SearchIcon />
+              <SendIcon />
             </InputGroup.Button>
           </InputGroup>
         </FlexboxGrid>

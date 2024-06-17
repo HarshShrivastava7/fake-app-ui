@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import './App.css';
-import { useLocation, BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Text, Progress, FlexboxGrid, Input, InputGroup, Button } from 'rsuite';
+import { useNavigate, useLocation, BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Message, Text, Progress, FlexboxGrid, Input, InputGroup, Button } from 'rsuite';
 import NewsItem from './NewsItem';
+import Alert from '@mui/material/Alert';
+import CheckIcon from '@mui/icons-material/Check';
+import { IconButton, ButtonToolbar } from 'rsuite';
+import WarningRoundIcon from '@rsuite/icons/WarningRound';
 
 const style2 = {
   width: 120,
@@ -11,8 +15,11 @@ const style2 = {
 };
 
 export default function Result(props) {
+  const navigate = useNavigate();
   const location = useLocation();
   const { state } = location;
+  const [msg, setMsg] = React.useState(false);
+  console.log(state.url)
 
   async function submitFeedback(feedback) {
     const data = { feedback, URL: state.url };
@@ -28,9 +35,12 @@ export default function Result(props) {
     try {
       const fetchResponse = await fetch('http://127.0.0.1:5000/feedback', params);
       const data = await fetchResponse.json();
+      setMsg(true);
       console.log(data);
+      // navigate('/');
     } catch (error) {
-      console.error(error);
+      // Alert.error('Your FeedBack is not submitted.')
+      console.error(error, "hi");
     }
   }
 
@@ -59,13 +69,16 @@ export default function Result(props) {
           <Text weight="semibold" style={{color: "#ffffff"}}>Give us some feedback if we predicted it wrong :)</Text>
         </FlexboxGrid>
         <FlexboxGrid justify="center">
-          <Button color="green" appearance="primary" onClick={submitFeedback('real')}>
+          <Button color="green" appearance="primary" onClick={()=>submitFeedback('real')}>
             Real
           </Button>
-          <Button color="red" appearance="primary" onClick={submitFeedback('fake')}>
+          <Button color="red" appearance="primary" onClick={()=>submitFeedback('fake')}>
             Fake
           </Button>
         </FlexboxGrid>
+        {msg ? <Message>
+      <strong>Success!</strong> Thank You For Your FeedBack.<IconButton circle icon={<WarningRoundIcon />} appearance="default" onClick={()=>setMsg(false)} />
+    </Message> : <></>}
         <NewsItem
             apiTitle={state.data.title}
             excerpt={state.data.content}
